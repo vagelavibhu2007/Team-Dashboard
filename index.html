@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Event & Volunteer Management</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="brand">
+          <span class="brand-logo">EV</span>
+          <div class="brand-text">
+            <h1>Event & Volunteer Suite</h1>
+            <p>Campus-wide events, tasks, and teams</p>
+          </div>
+        </div>
+        <div class="user-area" id="user-area">
+          <!-- Filled by JS when logged in -->
+        </div>
+      </header>
+
+      <main class="app-main">
+        <!-- Login Section -->
+        <section id="login-section" class="card auth-card">
+          <h2>Sign in</h2>
+          <p class="muted">
+            Enter your details to access the system
+          </p>
+          
+          <div id="login-step-1" class="form-grid">
+            <div class="form-group">
+              <label for="user-name">Full Name</label>
+              <input type="text" id="user-name" placeholder="Enter your full name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="user-role">Role</label>
+              <select id="user-role" required>
+                <option value="">Select your role</option>
+                <option value="Super Admin">Super Admin</option>
+                <option value="Admin">Admin</option>
+                <option value="Faculty Coordinator">Faculty Coordinator</option>
+                <option value="Club Coordinator">Club Coordinator</option>
+                <option value="Team Leader">Team Leader</option>
+                <option value="Volunteer">Volunteer</option>
+                <option value="Campus Ambassador">Campus Ambassador</option>
+              </select>
+            </div>
+            
+            <div id="team-selection" class="form-group" hidden>
+              <label for="user-team">Team</label>
+              <select id="user-team">
+                <option value="">Select your team</option>
+                <option value="tech-team">Tech Team</option>
+                <option value="marketing-team">Marketing Team</option>
+                <option value="sponsorship-team">Sponsorship Team</option>
+                <option value="graphic-team">Graphic Team</option>
+                <option value="decoration-team">Decoration Team</option>
+                <option value="production-team">Production Team</option>
+                <option value="media-team">Media Team</option>
+                <option value="pr-team">PR Team</option>
+                <option value="content-team">Content Team</option>
+              </select>
+            </div>
+            
+            <button type="button" class="btn primary" id="login-btn">Sign In</button>
+          </div>
+        </section>
+
+        <!-- Dashboard Shell -->
+        <section id="dashboard-section" class="dashboard" hidden>
+          <nav class="sidebar" id="sidebar-nav">
+            <h3>Modules</h3>
+            
+            <!-- Super Admin Modules -->
+            <div class="role-modules super-admin-only" hidden>
+              <button class="nav-item" data-target="overview-module">Overview</button>
+              <button class="nav-item" data-target="admin-management-module">Admin Management</button>
+              <button class="nav-item" data-target="permissions-module">Manage Permissions</button>
+              <button class="nav-item" data-target="events-module">Events</button>
+              <button class="nav-item" data-target="registrations-module">Registrations</button>
+              <button class="nav-item" data-target="tasks-module">Tasks</button>
+              <button class="nav-item" data-target="notifications-module">Notifications</button>
+              <button class="nav-item" data-target="reports-module">All Reports</button>
+              <button class="nav-item" data-target="logs-module">Activity Logs</button>
+            </div>
+            
+            <!-- Admin Modules -->
+            <div class="role-modules admin-only" hidden>
+              <button class="nav-item" data-target="overview-module">Overview</button>
+              <button class="nav-item" data-target="events-module">Events</button>
+              <button class="nav-item" data-target="coordinator-module">Assign Coordinators</button>
+              <button class="nav-item" data-target="registrations-module">Approve Registrations</button>
+              <button class="nav-item" data-target="reports-module">Reports</button>
+              <button class="nav-item" data-target="notifications-module">Notifications</button>
+            </div>
+            
+            <!-- Faculty Coordinator Modules -->
+            <div class="role-modules faculty-coordinator-only" hidden>
+              <button class="nav-item" data-target="overview-module">Overview</button>
+              <button class="nav-item" data-target="assigned-events-module">Assigned Events</button>
+              <button class="nav-item" data-target="progress-module">Monitor Progress</button>
+              <button class="nav-item" data-target="requests-module">Approve Requests</button>
+              <button class="nav-item" data-target="notifications-module">Notifications</button>
+            </div>
+            
+            <!-- Club Coordinator Modules -->
+            <div class="role-modules club-coordinator-only" hidden>
+              <button class="nav-item" data-target="overview-module">Overview</button>
+              <button class="nav-item" data-target="club-events-module">Club Events</button>
+              <button class="nav-item" data-target="volunteers-module">Manage Volunteers</button>
+              <button class="nav-item" data-target="registrations-module">View Registrations</button>
+              <button class="nav-item" data-target="notifications-module">Notifications</button>
+            </div>
+            
+            <!-- Team Leader Modules -->
+            <div class="role-modules team-leader-only" hidden>
+              <button class="nav-item" data-target="overview-module">Overview</button>
+              <button class="nav-item" data-target="tasks-module">Team Tasks</button>
+              <button class="nav-item" data-target="volunteer-management-module">Manage Team Members</button>
+              <button class="nav-item" data-target="notifications-module">Notifications</button>
+            </div>
+            
+            <!-- Volunteer Modules -->
+            <div class="role-modules volunteer-only" hidden>
+              <button class="nav-item" data-target="overview-module">Overview</button>
+              <button class="nav-item" data-target="my-tasks-module">My Tasks</button>
+              <button class="nav-item" data-target="notifications-module">Notifications</button>
+            </div>
+            
+            <!-- Campus Ambassador Modules -->
+            <div class="role-modules campus-ambassador-only" hidden>
+              <button class="nav-item" data-target="overview-module">Overview</button>
+              <button class="nav-item" data-target="referral-module">My Referral Code</button>
+              <button class="nav-item" data-target="referrals-module">Track Referrals</button>
+              <button class="nav-item" data-target="registrations-module">Track Registrations</button>
+              <button class="nav-item" data-target="notifications-module">Notifications</button>
+            </div>
+          </nav>
+
+          <section class="content">
+            <!-- Overview / Dashboard -->
+            <div id="overview-module" class="module">
+              <h2>Dashboard</h2>
+              <div class="grid-3 stats-grid">
+                <div class="stat-card">
+                  <span class="stat-label">Total Events</span>
+                  <span class="stat-value" id="stat-total-events">0</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-label">Total Registrations</span>
+                  <span
+                    class="stat-value"
+                    id="stat-total-registrations"
+                  >
+                    0
+                  </span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-label">Revenue</span>
+                  <span class="stat-value" id="stat-revenue">
+                    ₹0
+                  </span>
+                </div>
+              </div>
+
+              <div class="grid-2 overview-grid">
+                <div class="card">
+                  <h3>Upcoming events</h3>
+                  <ul id="overview-events" class="list"></ul>
+                </div>
+                <div class="card" id="campus-ambassador-panel" hidden>
+                  <h3>Campus Ambassador Referrals</h3>
+                  <p>
+                    Referral code:
+                    <code id="referral-code">N/A</code>
+                  </p>
+                  <p>
+                    Total referrals:
+                    <strong id="referral-count">0</strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Events -->
+            <div id="events-module" class="module" hidden>
+              <div class="module-header">
+                <h2>Event Management</h2>
+                <p class="muted">
+                  Create and manage events, schedules, and registration
+                  limits.
+                </p>
+              </div>
+
+              <div class="grid-2">
+                <form id="event-form" class="card form-grid">
+                  <h3>Create / Edit Event</h3>
+                  <input type="hidden" id="event-id" />
+                  <label>
+                    Title
+                    <input
+                      type="text"
+                      id="event-title"
+                      required
+                      maxlength="120"
+                    />
+                  </label>
+                  <label>
+                    Date &amp; Time
+                    <input
+                      type="datetime-local"
+                      id="event-datetime"
+                      required
+                    />
+                  </label>
+                  <label>
+                    Location
+                    <input
+                      type="text"
+                      id="event-location"
+                      required
+                      maxlength="120"
+                    />
+                  </label>
+                  <label>
+                    Registration limit
+                    <input
+                      type="number"
+                      id="event-limit"
+                      min="1"
+                      required
+                    />
+                  </label>
+                  <label>
+                    Price (₹)
+                    <input
+                      type="number"
+                      id="event-price"
+                      min="0"
+                      step="1"
+                    />
+                  </label>
+                  <label>
+                    Coordinator type
+                    <select id="event-coordinator-type">
+                      <option value="faculty">Faculty Coordinator</option>
+                      <option value="club">Club Coordinator</option>
+                    </select>
+                  </label>
+                  <div class="form-actions">
+                    <button type="submit" class="btn primary">
+                      Save Event
+                    </button>
+                    <button
+                      type="button"
+                      class="btn ghost"
+                      id="event-reset"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </form>
+
+                <div class="card">
+                  <h3>Events</h3>
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Schedule</th>
+                        <th>Limit</th>
+                        <th>Registered</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="events-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Registrations -->
+            <div id="registrations-module" class="module" hidden>
+              <div class="module-header">
+                <h2>Registrations</h2>
+                <p class="muted">
+                  Individual or team registrations with approvals and
+                  payments.
+                </p>
+              </div>
+
+              <div class="grid-2">
+                <form
+                  id="registration-form"
+                  class="card form-grid"
+                >
+                  <h3>New Registration</h3>
+                  <label>
+                    Event
+                    <select id="registration-event" required></select>
+                  </label>
+                  <label>
+                    Registration type
+                    <select id="registration-type">
+                      <option value="individual">Individual</option>
+                      <option value="team">Team</option>
+                    </select>
+                  </label>
+                  <label>
+                    Team name (for team)
+                    <input
+                      type="text"
+                      id="registration-team-name"
+                      maxlength="80"
+                    />
+                  </label>
+                  <label>
+                    Participants count
+                    <input
+                      type="number"
+                      id="registration-count"
+                      min="1"
+                      value="1"
+                    />
+                  </label>
+                  <label>
+                    Referral code (optional)
+                    <input
+                      type="text"
+                      id="registration-referral"
+                      maxlength="40"
+                    />
+                  </label>
+                  <label>
+                    Amount paid (₹)
+                    <input
+                      type="number"
+                      id="registration-amount"
+                      min="0"
+                      step="1"
+                    />
+                  </label>
+                  <p class="muted tiny">
+                    Payment integration placeholder: this simulates
+                    payment capture.
+                  </p>
+                  <button type="submit" class="btn primary">
+                    Submit Registration
+                  </button>
+                </form>
+
+                <div class="card">
+                  <h3>Pending &amp; Approved</h3>
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Event</th>
+                        <th>Type</th>
+                        <th>By</th>
+                        <th>Count</th>
+                        <th>Status</th>
+                        <th>Paid</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="registrations-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tasks -->
+            <div id="tasks-module" class="module" hidden>
+              <div class="module-header">
+                <h2>Task Management</h2>
+                <p class="muted">
+                  Assign tasks, set deadlines, and track progress across
+                  teams.
+                </p>
+              </div>
+
+              <!-- Team Leader Volunteer Management -->
+              <div id="team-leader-volunteer-management" class="team-leader-only" hidden>
+                <div class="card">
+                  <h3>Team Volunteers</h3>
+                  <div class="team-info">
+                    <p><strong>Team:</strong> <span id="current-team-name">-</span></p>
+                    <p><strong>Total Volunteers:</strong> <span id="volunteer-count">0</span></p>
+                  </div>
+                  
+                  <div class="volunteer-actions">
+                    <button class="btn primary" id="add-volunteer-btn">Add Volunteer</button>
+                    <button class="btn ghost" id="refresh-volunteers-btn">Refresh</button>
+                  </div>
+                  
+                  <div id="volunteer-list" class="volunteer-grid">
+                    <!-- Volunteers will be displayed here -->
+                  </div>
+                </div>
+                
+                <!-- Add Volunteer Modal -->
+                <div id="add-volunteer-modal" class="modal" hidden>
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3>Add New Volunteer</h3>
+                      <button class="modal-close" id="close-volunteer-modal">&times;</button>
+                    </div>
+                    <form id="add-volunteer-form" class="form-grid">
+                      <label>
+                        Full Name
+                        <input type="text" id="volunteer-name" required>
+                      </label>
+                      <label>
+                        Email
+                        <input type="email" id="volunteer-email" required>
+                      </label>
+                      <label>
+                        Phone
+                        <input type="tel" id="volunteer-phone">
+                      </label>
+                      <label>
+                        Skills
+                        <input type="text" id="volunteer-skills" placeholder="e.g., Design, Marketing, Photography">
+                      </label>
+                      <div class="form-actions">
+                        <button type="button" class="btn ghost" id="cancel-add-volunteer">Cancel</button>
+                        <button type="submit" class="btn primary">Add Volunteer</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <form id="task-form" class="card form-grid">
+                  <h3>Assign Task</h3>
+                  <label>
+                    Title
+                    <input
+                      type="text"
+                      id="task-title"
+                      required
+                      maxlength="120"
+                    />
+                  </label>
+                  <label>
+                    Assign to
+                    <select id="task-assignee" required></select>
+                  </label>
+                  <label>
+                    Deadline
+                    <input type="date" id="task-deadline" />
+                  </label>
+                  <label>
+                    Status
+                    <select id="task-status">
+                      <option value="todo">To Do</option>
+                      <option value="in_progress">In Progress</option>
+                      <option value="completed">Completed</option>
+                    </select>
+                  </label>
+                  <button type="submit" class="btn primary">
+                    Save Task
+                  </button>
+                </form>
+
+                <div class="card">
+                  <h3>My Tasks / Team Tasks</h3>
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Assignee</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                        <th>Update</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tasks-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Notifications -->
+            <div id="notifications-module" class="module" hidden>
+              <div class="module-header">
+                <h2>Notifications &amp; Announcements</h2>
+                <p class="muted">
+                  In-app announcements and simulated email alerts.
+                </p>
+              </div>
+
+              <div class="grid-2">
+                <form
+                  id="announcement-form"
+                  class="card form-grid"
+                >
+                  <h3>New Announcement</h3>
+                  <label>
+                    Title
+                    <input
+                      type="text"
+                      id="announcement-title"
+                      required
+                      maxlength="120"
+                    />
+                  </label>
+                  <label>
+                    Message
+                    <textarea
+                      id="announcement-body"
+                      rows="3"
+                      required
+                    ></textarea>
+                  </label>
+                  <button type="submit" class="btn primary">
+                    Publish
+                  </button>
+                </form>
+
+                <div class="card">
+                  <h3>Recent Notifications</h3>
+                  <ul id="notifications-list" class="list"></ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reports -->
+            <div id="reports-module" class="module" hidden>
+              <div class="module-header">
+                <h2>Reports &amp; Exports</h2>
+                <p class="muted">
+                  Event-wise registrations, revenue, and CSV export for
+                  backups.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="reports-actions">
+                  <button
+                    id="export-registrations"
+                    class="btn ghost"
+                  >
+                    Export registrations CSV
+                  </button>
+                  <button id="export-backup" class="btn ghost">
+                    Download JSON backup
+                  </button>
+                </div>
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Event</th>
+                      <th>Registrations</th>
+                      <th>Approved</th>
+                      <th>Revenue</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reports-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Activity Logs -->
+            <div id="logs-module" class="module" hidden>
+              <h2>Activity Logs</h2>
+              <p class="muted">
+                Immutable audit log of key actions for security and
+                monitoring.
+              </p>
+              <div class="card logs-card">
+                <ul id="logs-list" class="list logs-list"></ul>
+              </div>
+            </div>
+
+            <!-- Admin -->
+            <div id="admin-module" class="module" hidden>
+              <h2>Admin &amp; Role Management</h2>
+              <p class="muted">
+                Super Admins can manage admins and permissions.
+              </p>
+              <div class="grid-2">
+                <div class="card">
+                  <h3>System Users (demo)</h3>
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                      </tr>
+                    </thead>
+                    <tbody id="admin-users-table"></tbody>
+                  </table>
+                </div>
+                <div class="card">
+                  <h3>Role Capabilities</h3>
+                  <ul id="role-capabilities" class="list tiny-list"></ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <span>&copy; <span id="footer-year"></span> Campus Event Suite</span>
+        <span class="muted tiny">
+          Demo-only: replace localStorage + JS with real backend for
+          production.
+        </span>
+      </footer>
+    </div>
+
+    <!-- Configuration Files -->
+    <!-- Main Application -->
+    <script src="app-simple.js"></script>
+  </body>
+</html>
+
